@@ -1,0 +1,52 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:h2:mem:orderdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      myCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 50
+        failureRateThreshold: 40
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        permittedNumberOfCallsInHalfOpenState: 10
+        minimumNumberOfCalls: 20
+        waitDurationInOpenState: 30s
+        recordExceptions:
+          - java.lang.Exception
+          - java.net.SocketTimeoutException
+        ignoreExceptions:
+          - my.package.NonErrorException
+  retry:
+    instances:
+      myRetry:
+        maxAttempts: 5
+        waitDuration: 500ms
+        retryExceptions:
+          - java.io.IOException
+        ignoreExceptions:
+          - my.package.NonRetryableException
+        resultPredicate:
+          - "return result == null"

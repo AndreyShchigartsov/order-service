@@ -1,5 +1,7 @@
 package org.example.order.dto;
 
+import lombok.Builder;
+import lombok.Data;
 import org.example.order.valueobject.Money;
 import org.example.order.valueobject.PaymentMethod;
 import org.example.order.valueobject.PaymentStatus;
@@ -7,6 +9,8 @@ import org.example.order.valueobject.PaymentStatus;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
+@Data
 public class PaymentResponse {
 
     private UUID id;
