@@ -7,6 +7,7 @@ import org.example.order.dto.OrderRequest;
 import org.example.order.dto.OrderResponse;
 import org.example.order.entity.Order;
 import org.example.order.repository.OrderRepository;
+import org.example.order.service.client.PaymentClientService;
 import org.example.order.valueobject.OrderStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final PaymentClientService paymentClientService;
 
     @Transactional
     public OrderResponse createOrder(OrderRequest request) {
@@ -109,5 +111,9 @@ public class OrderService {
 
     private String generateOrderNumber() {
         return "ORD-" + System.currentTimeMillis();
+    }
+
+    public String fallback(Throwable t) {
+        return "Временно недоступно. Попробуйте позже.";
     }
 }
